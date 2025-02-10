@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {StorageService} from './storage.service';
+import {StorageService} from '../storage/storage.service';
 import {defaultPrompts, storage_pad, storage_pads_ids} from '../app.consts';
 import {v4 as uuidv4} from 'uuid';
 import {Pad} from './pad.model';

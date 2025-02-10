@@ -8,13 +8,13 @@ import {CompletionPadComponent} from './completion-pad/completion-pad.component'
 import {OpenRouterRequest} from '../providers/openrouter/openrouter.model';
 import {CompletionSettingsOpenRouterComponent} from './completion-settings/completion-settings-openrouter.component';
 import {getEncoding, Tiktoken} from "js-tiktoken";
-import {StorageService} from '../shared/storage.service';
+import {StorageService} from '../storage/storage.service';
 import {storage_or_apiKey} from '../app.consts';
 import {CompletionSettingsOpenaiComponent} from './completion-settings/completion-settings-openai.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Pad} from '../shared/pad.model';
-import {PadService} from '../shared/pad.service';
+import {Pad} from '../pads/pad.model';
+import {PadService} from '../pads/pad.service';
 
 @Component({
   selector: 'app-completions',

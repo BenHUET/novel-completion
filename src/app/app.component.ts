@@ -1,8 +1,8 @@
 import {Component, inject} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {AsyncPipe, NgForOf} from '@angular/common';
-import {Pad} from './shared/pad.model';
-import {PadService} from './shared/pad.service';
+import {Pad} from './pads/pad.model';
+import {PadService} from './pads/pad.service';
 import {Observable} from 'rxjs';
 
 @Component({

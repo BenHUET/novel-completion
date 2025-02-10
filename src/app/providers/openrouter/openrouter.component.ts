@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {StorageService} from '../../shared/storage.service';
+import {StorageService} from '../../storage/storage.service';
 import {storage_or_apiKey} from '../../app.consts';
 
 @Component({
