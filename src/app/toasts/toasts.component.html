@@ -1,0 +1,25 @@
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1200">
+  @for (toast of toastService.toasts; track toast) {
+    <ngb-toast
+      [autohide]="true"
+      [delay]="5000"
+      (hidden)="toastService.remove(toast)"
+    >
+      <span class="me-2">
+        <svg class="bi pe-none me-2 text-success" fill="currentColor" height="16" width="16"
+             *ngIf="toast.type === 'success'">
+          <use xlink:href="/bootstrap-icons.svg#check-circle-fill"></use>
+        </svg>
+        <svg class="bi pe-none me-2 text-warning" fill="currentColor" height="16" width="16"
+             *ngIf="toast.type === 'warning'">
+          <use xlink:href="/bootstrap-icons.svg#exclamation-circle-fill"></use>
+        </svg>
+        <svg class="bi pe-none me-2 text-danger" fill="currentColor" height="16" width="16"
+             *ngIf="toast.type === 'error'">
+          <use xlink:href="/bootstrap-icons.svg#x-circle-fill"></use>
+        </svg>
+        {{ toast.message }}
+      </span>
+    </ngb-toast>
+  }
+</div>

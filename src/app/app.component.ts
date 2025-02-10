@@ -4,10 +4,11 @@ import {AsyncPipe, NgForOf} from '@angular/common';
 import {Pad} from './pads/pad.model';
 import {PadService} from './pads/pad.service';
 import {Observable} from 'rxjs';
+import {ToastsComponent} from './toasts/toasts.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, NgForOf, AsyncPipe],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, NgForOf, AsyncPipe, ToastsComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

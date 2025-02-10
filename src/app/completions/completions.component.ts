@@ -15,6 +15,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Pad} from '../pads/pad.model';
 import {PadService} from '../pads/pad.service';
+import {ToastService} from '../toasts/toast.service';
 
 @Component({
   selector: 'app-completions',
@@ -35,6 +36,7 @@ export class CompletionsComponent implements OnInit {
   modalService = inject(NgbModal);
 
   @ViewChild(CompletionPadComponent) padComponent!: CompletionPadComponent;
+  @ViewChild('successToast') successToast!: TemplateRef<unknown>;
 
   reasoning?: string;
   defaultRequest: ProviderRequest = {
@@ -68,7 +70,8 @@ export class CompletionsComponent implements OnInit {
   constructor(
     private providerService: OpenRouterService,
     private storageService: StorageService,
-    private padService: PadService
+    private padService: PadService,
+    private toastService: ToastService
   ) {
     this.queryParams$ = this.route.queryParams.subscribe(params => {
       this.loadPad(params['id']);
@@ -215,17 +218,33 @@ export class CompletionsComponent implements OnInit {
         error: (err: unknown) => {
           console.log(err);
           this.isRunning = false;
+          this.toastService.show({
+            type: 'error',
+            message: 'request error',
+          });
         },
         complete: () => {
           this.isRunning = false;
+          this.toastService.show({
+            type: 'success',
+            message: 'request done',
+          });
         }
       }
     );
   }
 
   abort(): void {
+    if (!this.isRunning) {
+      return;
+    }
+
     this.$querySubscription?.unsubscribe();
     this.isRunning = false;
+    this.toastService.show({
+      type: 'warning',
+      message: 'request aborted',
+    });
   }
 
   loadPad(id: string): void {
