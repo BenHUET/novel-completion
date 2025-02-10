@@ -153,7 +153,7 @@ export class CompletionsComponent implements OnInit {
       let prefill: string | undefined;
 
       // there is instructions from the user
-      if (splitPrompt.length > 0) {
+      if (splitPrompt.length > 1) {
         splitPrompt.forEach(part => {
           request.messages!.push({
             role: part.text ? "assistant" : "user",
