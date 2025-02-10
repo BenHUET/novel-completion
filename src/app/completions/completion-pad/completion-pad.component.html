@@ -1,0 +1,12 @@
+<form [formGroup]="form" class="container-fluid flex-grow-1 form-editor">
+  <quill-editor
+    (onContentChanged)="onContentChanged($event)"
+    (onEditorCreated)="created($event)"
+    [modules]="quillConfig.modules"
+    [readOnly]="this.isReadOnly"
+    class="w-100"
+    classes="editor"
+    formControlName="content"
+    format="text">
+  </quill-editor>
+</form>

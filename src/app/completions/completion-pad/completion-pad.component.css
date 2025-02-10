@@ -1,0 +1,26 @@
+.form-editor {
+  min-height: calc(1.5em + .75rem + calc(var(--bs-border-width) * 2));
+  height: 100%;
+  width: 50vw;
+  resize: horizontal;
+  border: none;
+  background-color: var(--bs-tertiary-bg);
+  overflow: scroll;
+  --bs-gutter-x: 0;
+  display: flex;
+}
+
+@media (width <= 992px) {
+  .form-editor {
+    width: 100%;
+  }
+}
+
+:host ::ng-deep .editor {
+  font-family: serif;
+  font-size: 14pt;
+}
+
+:host ::ng-deep .inferred {
+  background-color: rgba(0, 0, 0, 0.1);
+}

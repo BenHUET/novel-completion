@@ -1,0 +1,11 @@
+{
+  "/openrouter": {
+    "target": "https://openrouter.ai",
+    "changeOrigin": true,
+    "ws": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/openrouter": ""
+    }
+  }
+}

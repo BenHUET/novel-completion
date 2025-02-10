@@ -1,0 +1,101 @@
+<div class="d-flex flex-row vh-100">
+  <div class="d-flex flex-column flex-shrink-0 text-bg-secondary p-3" style="width: 350px;">
+    <div class="text-end">
+      <!-- reasoning -->
+      <button (click)="openReasoningModal(reasoningModal)" [disabled]="reasoning === undefined"
+              class="btn btn-light ms-2">
+        <svg class="bi pe-none" fill="currentColor" height="16" width="16">
+          <use xlink:href="/bootstrap-icons.svg#lightbulb-fill"></use>
+        </svg>
+      </button>
+      <!-- cancel -->
+      <button (click)="abort()" [disabled]="!isRunning" class="btn btn-danger ms-2">
+        <svg class="bi pe-none" fill="currentColor" height="16" width="16">
+          <use xlink:href="/bootstrap-icons.svg#stop-fill"></use>
+        </svg>
+      </button>
+      <!-- retry -->
+      <button (click)="retry()" [disabled]="!isRetryable || isRunning" class="btn btn-primary ms-2">
+        <svg class="bi pe-none" fill="currentColor" height="16" width="16">
+          <use xlink:href="/bootstrap-icons.svg#arrow-counterclockwise"></use>
+        </svg>
+      </button>
+      <!-- run -->
+      <button (click)="run()" [disabled]="isRunning" class="btn btn-primary ms-2">
+        <svg class="bi pe-none" fill="currentColor" height="16" width="16">
+          <use xlink:href="/bootstrap-icons.svg#play-fill"></use>
+        </svg>
+      </button>
+    </div>
+    <hr>
+    <div>
+
+    </div>
+    <div>
+      <span class="d-inline-block mb-2">tokens : {{ tokenCount }}</span>
+      <div>
+        <!-- delete pad -->
+        <button (click)="openDeletePadModal(deleteModal)" class="btn btn-danger">
+          <svg class="bi pe-none" fill="currentColor" height="16" width="16">
+            <use xlink:href="/bootstrap-icons.svg#trash-fill"></use>
+          </svg>
+        </button>
+        <!-- edit pad -->
+        <button (click)="openEditPadModel(editModal)" class="btn btn-light ms-2">
+          <svg class="bi pe-none" fill="currentColor" height="16" width="16">
+            <use xlink:href="/bootstrap-icons.svg#pencil-square"></use>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <hr>
+    <label class="form-label" for="provider">provider</label>
+    <select [(ngModel)]="provider" class="form-select" id="provider">
+      <option value="openrouter">OpenRouter</option>
+      <option value="openai">OpenAI</option>
+    </select>
+    <hr>
+    <app-completion-settings-openrouter *ngIf="provider === 'openrouter'" [(request)]="openRouterRequest"
+                                        class="overflow-y-scroll h-100"></app-completion-settings-openrouter>
+    <app-completion-settings-openai *ngIf="provider === 'openai'"
+                                    class="overflow-y-scroll h-100"></app-completion-settings-openai>
+  </div>
+  <app-completion-pad (editorChange)="onContentChange()" (editorReady)="onEditorReady()" [(contents)]="pad.contents"
+                      [isReadOnly]="isRunning" class="d-flex flex-column flex-grow-1 vh-100 justify-content-center"/>
+</div>
+
+<ng-template #reasoningModal let-modal>
+  <div class="modal-header d-flex justify-content-between align-items-center">
+    <h4 class="modal-title">reasoning</h4>
+    <button (click)="modal.close()" class="btn btn-secondary" type="button">close</button>
+  </div>
+  <div [innerText]="reasoning" class="modal-body"></div>
+</ng-template>
+
+<ng-template #deleteModal let-modal>
+  <div class="modal-header d-flex justify-content-between align-items-center">
+    <h4 class="modal-title">delete pad</h4>
+  </div>
+  <div class="modal-body">
+    <span>are you sure you want to delete this pad ?</span>
+  </div>
+  <div class="modal-footer">
+    <button (click)="modal.dismiss()" class="btn btn-outline-secondary" type="button">no, keep it</button>
+    <button (click)="modal.close(); deletePad();" class="btn btn-danger" type="button">yes, delete it</button>
+  </div>
+</ng-template>
+
+<ng-template #editModal let-modal>
+  <div class="modal-header d-flex justify-content-between align-items-center">
+    <h4 class="modal-title">edit pad</h4>
+    <button (click)="modal.close()" class="btn btn-primary" type="button">save</button>
+  </div>
+  <div class="modal-body">
+    <form (submit)="modal.close()" [formGroup]="formEditPad">
+      <div class="form-group mb-3">
+        <label class="form-label" for="label">label</label>
+        <input class="form-control" formControlName="label" id="label" maxlength="12" required>
+      </div>
+    </form>
+  </div>
+</ng-template>
