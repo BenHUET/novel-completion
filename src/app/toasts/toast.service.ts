@@ -7,7 +7,6 @@ export class ToastService {
 
   show(toast: Toast) {
     this.toasts.push(toast);
-    console.log(toast);
   }
 
   remove(toast: Toast) {
