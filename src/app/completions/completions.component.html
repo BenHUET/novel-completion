@@ -34,10 +34,7 @@
     <div>
       <div class="mb-2">
         <span class="d-block">tokens : {{ tokenCount }}</span>
-        <span class="d-block">cost :
-          <span *ngIf="pad.cost">{{ pad.cost | number:'1.2-6' }}$</span>
-          <span *ngIf="!pad.cost">???</span>
-        </span>
+        <span class="d-block">cost : ${{ pad.cost | number:'1.2-6' }}</span>
       </div>
       <div>
         <!-- delete pad -->

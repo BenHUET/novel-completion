@@ -224,12 +224,7 @@ export class CompletionsComponent implements OnInit {
     const key = this.storageService.get(storage_or_apiKey) as string ?? '';
 
     this.providerService.getGenerationCost(id, key).subscribe(res => {
-      if (this.pad.cost) {
-        this.pad.cost += res.total_cost;
-      } else {
-        this.pad.cost = res.total_cost;
-      }
-
+      this.pad.cost = res.total_cost;
       this.savePad(false);
     });
   }

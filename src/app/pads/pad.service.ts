@@ -44,6 +44,7 @@ export class PadService {
       {
         id: id,
         label: "new pad",
+        cost: 0,
         contents: new Delta([
           {
             insert: defaultPrompts[Math.floor(Math.random() * defaultPrompts.length)]
