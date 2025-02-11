@@ -1,13 +1,13 @@
-import {Injectable} from '@angular/core';
-import {StorageService} from '../storage/storage.service';
-import {defaultPrompts, storage_pad, storage_pads_ids} from '../app.consts';
-import {v4 as uuidv4} from 'uuid';
-import {Pad} from './pad.model';
-import {BehaviorSubject} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { StorageService } from '../storage/storage.service';
+import { defaultPrompts, storage_pad, storage_pads_ids } from '../app.consts';
+import { v4 as uuidv4 } from 'uuid';
+import { Pad } from './pad.model';
+import { BehaviorSubject } from 'rxjs';
 import Delta from 'quill-delta';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PadService {
   padsSubject = new BehaviorSubject<Pad[]>([]);
@@ -19,9 +19,7 @@ export class PadService {
   getAllPads(): Pad[] {
     const ids = this.storageService.get(storage_pads_ids) as string[];
     if (ids) {
-      return ids
-        .map(id => this.getPad(id))
-        .filter(p => p != null);
+      return ids.map((id) => this.getPad(id)).filter((p) => p != null);
     }
 
     return [];
@@ -43,15 +41,16 @@ export class PadService {
       id,
       {
         id: id,
-        label: "new pad",
+        label: 'new pad',
         cost: 0,
         contents: new Delta([
           {
-            insert: defaultPrompts[Math.floor(Math.random() * defaultPrompts.length)]
-          }
+            insert:
+              defaultPrompts[Math.floor(Math.random() * defaultPrompts.length)],
+          },
         ]),
       },
-      false
+      fals,
     );
 
     let ids = this.storageService.get(storage_pads_ids) as string[];
@@ -80,7 +79,7 @@ export class PadService {
     this.storageService.remove(this.getPadStorageKey(id));
 
     let ids = this.storageService.get(storage_pads_ids) as string[];
-    ids = ids.filter(i => i !== id);
+    ids = ids.filter((i) => i !== id);
 
     this.storageService.set(storage_pads_ids, ids);
 

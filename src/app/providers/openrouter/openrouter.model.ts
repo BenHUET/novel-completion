@@ -1,4 +1,8 @@
-import {ProviderGeneration, ProviderModel, ProviderRequest} from '../provider.model';
+import {
+  ProviderGeneration,
+  ProviderModel,
+  ProviderRequest,
+} from '../provider.model';
 
 export interface OpenRouterRequest extends ProviderRequest {
   response_format?: { type: 'json_object' };
@@ -17,7 +21,7 @@ export interface OpenRouterResponse {
   choices: (NonStreamingChoice | StreamingChoice | NonChatChoice)[];
   created: number;
   model: string;
-  object: "chat.completion" | "chat.completion.chunk";
+  object: 'chat.completion' | 'chat.completion.chunk';
   system_fingerprint?: string;
   usage?: ResponseUsage;
 }
@@ -63,18 +67,18 @@ interface ErrorResponse {
 
 interface ToolCall {
   id: string;
-  type: "function";
+  type: 'function';
   function: unknown;
 }
 
 export interface OpenRouterModelsResponse {
-  data: ProviderModel[]
+  data: ProviderModel[];
 }
 
 export interface OpenRouterModelProvidersResponse {
   data: {
-    endpoints: OpenRouterProvider[]
-  }
+    endpoints: OpenRouterProvider[];
+  };
 }
 
 export interface OpenRouterProvider {
@@ -90,7 +94,7 @@ export interface OpenRouterProvider {
 }
 
 export interface OpenRouterGenerationResponse {
-  data: OpenRouterGeneration
+  data: OpenRouterGeneration;
 }
 
 export interface OpenRouterGeneration extends ProviderGeneration {

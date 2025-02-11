@@ -1,12 +1,25 @@
 <main class="d-flex flex-nowrap min-vh-100">
   <app-toasts></app-toasts>
-  <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 250px;">
+  <div
+    class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark"
+    style="width: 250px"
+  >
     <div class="fs-6 text-center">novel-completion</div>
-    <hr>
+    <hr />
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
-        <a ariaCurrentWhenActive="page" class="nav-link text-white" routerLink="/providers" routerLinkActive="active">
-          <svg class="bi pe-none me-2" fill="currentColor" height="16" width="16">
+        <a
+          ariaCurrentWhenActive="page"
+          class="nav-link text-white"
+          routerLink="/providers"
+          routerLinkActive="active"
+        >
+          <svg
+            class="bi pe-none me-2"
+            fill="currentColor"
+            height="16"
+            width="16"
+          >
             <use xlink:href="/bootstrap-icons.svg#plug-fill"></use>
           </svg>
           providers
@@ -14,16 +27,31 @@
       </li>
       <li class="nav-item">
         <a class="nav-link text-white">
-          <svg class="bi pe-none me-2" fill="currentColor" height="16" width="16">
+          <svg
+            class="bi pe-none me-2"
+            fill="currentColor"
+            height="16"
+            width="16"
+          >
             <use xlink:href="/bootstrap-icons.svg#pencil-fill"></use>
           </svg>
           completions
         </a>
       </li>
       <li *ngFor="let pad of pads$ | async" class="nav-item ms-3">
-        <a [queryParams]="{id: pad.id}" [routerLinkActiveOptions]="{exact: true}" [routerLink]="['/completions']"
-           class="nav-link text-white" routerLinkActive="active">
-          <svg class="bi pe-none me-2" fill="currentColor" height="16" width="16">
+        <a
+          [queryParams]="{ id: pad.id }"
+          [routerLinkActiveOptions]="{ exact: true }"
+          [routerLink]="['/completions']"
+          class="nav-link text-white"
+          routerLinkActive="active"
+        >
+          <svg
+            class="bi pe-none me-2"
+            fill="currentColor"
+            height="16"
+            width="16"
+          >
             <use xlink:href="/bootstrap-icons.svg#file-text-fill"></use>
           </svg>
           {{ pad.label }}
@@ -31,7 +59,12 @@
       </li>
       <li class="nav-item ms-3">
         <button (click)="onCreatePad()" class="btn btn-lin nav-link text-white">
-          <svg class="bi pe-none me-2" fill="currentColor" height="16" width="16">
+          <svg
+            class="bi pe-none me-2"
+            fill="currentColor"
+            height="16"
+            width="16"
+          >
             <use xlink:href="/bootstrap-icons.svg#plus-circle-fill"></use>
           </svg>
           new pad
@@ -40,7 +73,6 @@
     </ul>
   </div>
   <div class="container-fluid p-0 vw-100">
-    <router-outlet/>
+    <router-outlet />
   </div>
 </main>
-

@@ -1,17 +1,14 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {ContentChange, QuillEditorComponent} from 'ngx-quill';
-import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ContentChange, QuillEditorComponent } from 'ngx-quill';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import Quill from 'quill';
 import './inferred.quill.blot';
-import {InferredBlot} from './inferred.quill.blot';
+import { InferredBlot } from './inferred.quill.blot';
 import Delta from 'quill-delta';
 
 @Component({
   selector: 'app-completion-pad',
-  imports: [
-    QuillEditorComponent,
-    ReactiveFormsModule,
-  ],
+  imports: [QuillEditorComponent, ReactiveFormsModule],
   templateUrl: './completion-pad.component.html',
   styleUrl: './completion-pad.component.css',
 })
@@ -31,7 +28,7 @@ export class CompletionPadComponent implements OnInit {
       list: false,
       toolbar: false,
       history: {
-        userOnly: true
+        userOnly: true,
       },
       keyboard: {
         bindings: {
@@ -59,9 +56,9 @@ export class CompletionPadComponent implements OnInit {
           'embed right': null,
           'embed right shift': null,
           'table down': null,
-          'table up': null
-        }
-      }
+          'table up': nul,
+        },
+      },
     },
     formats: ['inferred'],
   };
@@ -76,7 +73,7 @@ export class CompletionPadComponent implements OnInit {
       content: new FormControl(),
     });
 
-    this.form.valueChanges.subscribe(_ => {
+    this.form.valueChanges.subscribe((_) => {
       if (this.quillEditor) {
         this._emitChanges();
       }
@@ -85,13 +82,10 @@ export class CompletionPadComponent implements OnInit {
 
   created(editor: Quill): void {
     this.quillEditor = editor;
-    this.quillEditor.clipboard.addMatcher(
-      Node.ELEMENT_NODE,
-      (_, delta) => {
-        const ops = delta.ops.map((op) => ({insert: op.insert}));
-        return new Delta(ops)
-      }
-    );
+    this.quillEditor.clipboard.addMatcher(Node.ELEMENT_NODE, (_, delta) => {
+      const ops = delta.ops.map((op) => ({ insert: op.insert }));
+      return new Delta(ops);
+    });
 
     this.setContents(this.contents);
     this.editorReady.emit();
@@ -109,7 +103,12 @@ export class CompletionPadComponent implements OnInit {
     }
 
     if (inferred) {
-      this.quillEditor.insertText(this.quillEditor.getLength() - 1, inferred, 'inferred', true);
+      this.quillEditor.insertText(
+        this.quillEditor.getLength() - 1,
+        inferred,
+        'inferred',
+        true,
+      );
       this._emitChanges();
       this.quillEditor.root.scrollTop = this.quillEditor.root.scrollHeight;
     }
@@ -124,10 +123,13 @@ export class CompletionPadComponent implements OnInit {
   onContentChanged($event: ContentChange): void {
     if (!this.isReadOnly) {
       if ($event.delta.ops.at(-1)?.insert) {
-        const currentIndex = $event.delta.ops.at(0)?.retain as number + 1;
+        const currentIndex = ($event.delta.ops.at(0)?.retain as number) + 1;
         const currentBlot = this.quillEditor.getLeaf(currentIndex);
 
-        if (currentBlot && currentBlot[0]?.domNode.parentElement?.classList.contains('inferred')) {
+        if (
+          currentBlot &&
+          currentBlot[0]?.domNode.parentElement?.classList.contains('inferred')
+        ) {
           this.quillEditor.formatText(currentIndex - 1, 1, 'inferred', false);
         }
       }
