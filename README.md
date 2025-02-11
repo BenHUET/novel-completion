@@ -1,5 +1,7 @@
 # novel-completion
 
+![Screenshot_20250211_130732](https://github.com/user-attachments/assets/058a81a2-cccc-468f-97ca-c515443e279a)
+
 A user-friendly LLM web-interface specialized in story completions.
 
 # Usage
@@ -32,7 +34,8 @@ These tags are automatically omitted when using the `/api/v1/completions` mode, 
 * Providers selection and ordering
 * Reasoning
 
-![Screenshot_20250210_143645](https://github.com/user-attachments/assets/bad503a1-7a4c-4bab-934e-6a5a9b844acb)
+![Screenshot_20250211_130604](https://github.com/user-attachments/assets/f2a43aaf-1fa6-4be6-a845-082384c91556)
+![Screenshot_20250211_130635](https://github.com/user-attachments/assets/f73b2b2e-9685-4753-af26-300240ea767e)
 
 ## Planned
 * OpenAI
