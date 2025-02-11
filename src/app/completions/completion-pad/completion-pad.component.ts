@@ -69,7 +69,7 @@ export class CompletionPadComponent implements OnInit {
   form!: FormGroup;
   deltaBeforeInsert?: Delta;
 
-  ngOnInit() {
+  ngOnInit(): void {
     Quill.register(InferredBlot);
 
     this.form = new FormGroup({
@@ -83,7 +83,7 @@ export class CompletionPadComponent implements OnInit {
     });
   }
 
-  created(editor: Quill) {
+  created(editor: Quill): void {
     this.quillEditor = editor;
     this.quillEditor.clipboard.addMatcher(
       Node.ELEMENT_NODE,
@@ -97,7 +97,7 @@ export class CompletionPadComponent implements OnInit {
     this.editorReady.emit();
   }
 
-  setContents(contents: Delta) {
+  setContents(contents: Delta): void {
     if (this.quillEditor) {
       this.quillEditor.setContents(contents);
     }
@@ -121,7 +121,7 @@ export class CompletionPadComponent implements OnInit {
     this._emitChanges();
   }
 
-  onContentChanged($event: ContentChange) {
+  onContentChanged($event: ContentChange): void {
     if (!this.isReadOnly) {
       if ($event.delta.ops.at(-1)?.insert) {
         const currentIndex = $event.delta.ops.at(0)?.retain as number + 1;

@@ -37,7 +37,6 @@ export class CompletionsComponent implements OnInit {
   modalService = inject(NgbModal);
 
   @ViewChild(CompletionPadComponent) padComponent!: CompletionPadComponent;
-  @ViewChild('successToast') successToast!: TemplateRef<unknown>;
 
   reasoning?: string;
   defaultRequest: ProviderRequest = {
@@ -86,15 +85,15 @@ export class CompletionsComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.isInitializing = false;
   }
 
-  onEditorReady() {
+  onEditorReady(): void {
     this.onContentChange();
   }
 
-  onContentChange() {
+  onContentChange(): void {
     this.tokenCount = this.encoder.encode(this.padComponent.quillEditor.getText()).length;
 
     // If the content change but the isRunning flag is false, it means it's the user making changes thus disabling retry
@@ -246,21 +245,21 @@ export class CompletionsComponent implements OnInit {
   }
 
   @HostListener('document:keydown', ['$event'])
-  onKeyDown(event: KeyboardEvent) {
+  onKeyDown(event: KeyboardEvent): void {
     if (event.ctrlKey && event.key === 'Enter') {
       this.run();
     }
   }
 
-  openReasoningModal(content: TemplateRef<unknown>) {
+  openReasoningModal(content: TemplateRef<unknown>): void {
     this.modalService.open(content, {scrollable: true});
   }
 
-  openDeletePadModal(deleteModal: TemplateRef<unknown>) {
+  openDeletePadModal(deleteModal: TemplateRef<unknown>): void {
     this.modalService.open(deleteModal);
   }
 
-  openEditPadModel(editModal: TemplateRef<unknown>) {
+  openEditPadModel(editModal: TemplateRef<unknown>): void {
     this.modalService.open(editModal);
   }
 }

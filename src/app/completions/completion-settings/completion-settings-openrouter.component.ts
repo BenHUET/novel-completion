@@ -79,12 +79,12 @@ export class CompletionSettingsOpenRouterComponent {
     this.updateRequestProviders();
   }
 
-  onProviderChanged($event: Event, provider: OpenRouterProvider) {
+  onProviderChanged($event: Event, provider: OpenRouterProvider): void {
     provider.selected = !provider.selected;
     this.updateRequestProviders();
   }
 
-  updateRequestProviders() {
+  updateRequestProviders(): void {
     this.request.provider = {
       allow_fallbacks: false,
       order: this.providers

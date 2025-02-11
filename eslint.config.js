@@ -37,7 +37,8 @@ module.exports = tseslint.config(
           "varsIgnorePattern": "^_",
           "caughtErrorsIgnorePattern": "^_"
         }
-      ]
+      ],
+      "@typescript-eslint/explicit-function-return-type": "error"
     },
   },
   {

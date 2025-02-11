@@ -97,7 +97,7 @@ export class OpenRouterService implements ProviderService {
   private getObservableEventSource(request: OpenRouterRequest, key: string, url: string, onChunk: (chunk: OpenRouterResponse, observer: Subscriber<ProviderResponse>) => void): Observable<ProviderResponse> {
     return new Observable<ProviderResponse>((observer) => {
       const eventSource = new EventSource(url, {
-        fetch: (input, init) =>
+        fetch: (input, init): Promise<Response> =>
           fetch(input, {
             ...init,
             method: 'POST',
@@ -110,7 +110,7 @@ export class OpenRouterService implements ProviderService {
           }),
       })
 
-      eventSource.onmessage = (event) => {
+      eventSource.onmessage = (event): void => {
         if (event.data === '[DONE]') {
           observer.complete();
         }
@@ -124,7 +124,7 @@ export class OpenRouterService implements ProviderService {
         onChunk(json as OpenRouterResponse, observer);
       };
 
-      eventSource.onerror = (error) => {
+      eventSource.onerror = (error): void => {
         observer.error(error);
       };
 
