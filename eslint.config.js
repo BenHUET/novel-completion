@@ -40,14 +40,14 @@ module.exports = tseslint.config(
           caughtErrorsIgnorePattern: '^_',
         },
       ],
-      '@typescript-eslint/explicit-function-return-type': 'error,
+      '@typescript-eslint/explicit-function-return-type': 'error',
     },
   },
   {
     files: ['**/*.html'],
     extends: [
       ...angular.configs.templateRecommended,
-      ...angular.configs.templateAccessibility
+      ...angular.configs.templateAccessibility,
     ],
     rules: {},
   },
