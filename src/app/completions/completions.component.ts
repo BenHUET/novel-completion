@@ -71,7 +71,7 @@ export class CompletionsComponent implements OnInit {
   provider = 'openrouter';
   openRouterRequest: OpenRouterRequest = {
     ...this.defaultRequest,
-    include_reasoning: tru,
+    include_reasoning: true,
   };
   isInitializing = true;
   isRunning = false;
@@ -83,8 +83,8 @@ export class CompletionsComponent implements OnInit {
   queryParams$!: Subscription;
   pad!: Pad;
   formEditPad = new FormGroup<{
-    label: FormControl<string>;
-  }>({ label: new FormControl() });
+    label: FormControl<string | null>;
+  }>({ label: new FormControl<string>('') });
 
   constructor(
     private providerService: OpenRouterService,
@@ -93,13 +93,13 @@ export class CompletionsComponent implements OnInit {
     private toastService: ToastService,
   ) {
     this.queryParams$ = this.route.queryParams.subscribe((params) => {
-      this.loadPad(params['id']);
+      this.loadPad(params['id'] as string);
       this.abort();
       this.formEditPad.get('label')!.setValue(this.pad.label);
     });
 
     this.formEditPad.get('label')?.valueChanges.subscribe((value) => {
-      this.pad.label = value;
+      this.pad.label = value ?? '';
       this.savePad(true);
     });
   }
@@ -258,7 +258,7 @@ export class CompletionsComponent implements OnInit {
   }
 
   savePad(notify: boolean): void {
-    this.padService.savePad(this.pad.id, this.pad!, notify);
+    this.padService.savePad(this.pad.id, this.pad, notify);
   }
 
   deletePad(): void {

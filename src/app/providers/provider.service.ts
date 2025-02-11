@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export interface ProviderService {
   getChatCompletions(
     request: ProviderRequest,
-    key: strin,
+    key: string,
   ): Observable<ProviderResponse>;
 
   getCompletions(

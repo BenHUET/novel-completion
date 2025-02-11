@@ -67,11 +67,10 @@
                 : '??'
             }}</span
           >
-          <span
-          >{{ provider.pricing.prompt * 1000000 | number: '1.2-2' }} $/{{
-              provider.pricing.completion * 1000000 | number: '1.2-2'
-            }}$</span
-          >
+          <span>
+            {{ provider.pricing.prompt * 1000000 | number: '1.2-2' }}
+            $/{{ provider.pricing.completion * 1000000 | number: '1.2-2' }}$
+          </span>
         </small>
       </span>
       <svg

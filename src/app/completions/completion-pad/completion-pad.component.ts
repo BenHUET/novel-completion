@@ -56,7 +56,7 @@ export class CompletionPadComponent implements OnInit {
           'embed right': null,
           'embed right shift': null,
           'table down': null,
-          'table up': nul,
+          'table up': null,
         },
       },
     },

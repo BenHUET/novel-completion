@@ -50,7 +50,7 @@ export class PadService {
           },
         ]),
       },
-      fals,
+      false,
     );
 
     let ids = this.storageService.get(storage_pads_ids) as string[];

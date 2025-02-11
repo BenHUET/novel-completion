@@ -36,7 +36,7 @@ export class OpenRouterService implements ProviderService {
         observer.next({
           id: chunk.id,
           text: choice.delta.content,
-          reasoning: choice.delta.reasonin,
+          reasoning: choice.delta.reasoning,
         });
       },
     );
@@ -54,7 +54,7 @@ export class OpenRouterService implements ProviderService {
       (chunk, observer) => {
         const text = (chunk.choices[0] as NonChatChoice).text;
         if (text !== null)
-          observer.next({ text: (chunk.choices[0] as NonChatChoice).text! });
+          observer.next({ text: (chunk.choices[0] as NonChatChoice).text });
       },
     );
   }
@@ -78,7 +78,7 @@ export class OpenRouterService implements ProviderService {
         map((res) => {
           return res.data.endpoints.map((provider) => ({
             ...provider,
-            selected: tru,
+            selected: true,
           }));
         }),
       );
@@ -132,7 +132,11 @@ export class OpenRouterService implements ProviderService {
           observer.complete();
         }
 
-        const json = JSON.parse(event.data);
+        interface JsonResponse extends OpenRouterResponse {
+          error: { message: string };
+        }
+
+        const json = JSON.parse(event.data as string) as JsonResponse;
         if (json.error) {
           console.log(json.error);
           throw new Error(json.error.message);

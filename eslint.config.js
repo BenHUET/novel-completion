@@ -13,6 +13,14 @@ module.exports = tseslint.config(
       ...tseslint.configs.stylistic,
       ...angular.configs.tsRecommended,
       eslintConfigPrettier,
+      tseslint.configs.recommendedTypeChecked,
+      {
+        languageOptions: {
+          parserOptions: {
+            projectService: true,
+          },
+        },
+      },
     ],
     processor: angular.processInlineTemplates,
     rules: {

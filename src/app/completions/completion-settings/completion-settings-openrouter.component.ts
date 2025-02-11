@@ -1,11 +1,19 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { OpenRouterProvider, OpenRouterRequest } from '../../providers/openrouter/openrouter.model';
+import {
+  OpenRouterProvider,
+  OpenRouterRequest,
+} from '../../providers/openrouter/openrouter.model';
 import { FormsModule } from '@angular/forms';
 import { OpenRouterService } from '../../providers/openrouter/openrouter.service';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, DecimalPipe, NgForOf, NgIf } from '@angular/common';
 import { Observable } from 'rxjs';
 import { OrderModule } from 'ngx-order-pipe';
-import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
+import {
+  CdkDrag,
+  CdkDragDrop,
+  CdkDropList,
+  moveItemInArray,
+} from '@angular/cdk/drag-drop';
 import { ShortNumberPipe } from '../../shared/short-number.pipe';
 import { ProviderModel } from '../../providers/provider.model';
 import { or_defaultModel } from '../../app.consts';
@@ -21,7 +29,7 @@ import { or_defaultModel } from '../../app.consts';
     CdkDropList,
     CdkDrag,
     ShortNumberPipe,
-    DecimalPie,
+    DecimalPipe,
   ],
   templateUrl: './completion-settings-openrouter.component.html',
   styleUrl: './completion-settings-openrouter.component.css',
@@ -63,12 +71,12 @@ export class CompletionSettingsOpenRouterComponent {
       },
       error: (err: unknown) => {
         console.log(err);
-      ,
+      },
     });
   }
 
   onProviderReordered(event: CdkDragDrop<string[]>): void {
-    moveItemInArray(this.providers, event.previousIndex, event.currentIndex)
+    moveItemInArray(this.providers, event.previousIndex, event.currentIndex);
     this.updateRequestProviders();
   }
 

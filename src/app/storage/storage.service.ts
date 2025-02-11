@@ -8,7 +8,7 @@ export class StorageService {
     localStorage.setItem(key, JSON.stringify(data));
   }
 
-  get(key: string): unknown | null {
+  get(key: string): unknown {
     const data = localStorage.getItem(key);
     if (data) {
       return JSON.parse(data);

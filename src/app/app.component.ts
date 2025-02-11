@@ -1,9 +1,16 @@
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
 import { AsyncPipe, NgForOf } from '@angular/common';
 import { Pad } from './pads/pad.model';
 import { PadService } from './pads/pad.service';
 import { Observable } from 'rxjs';
+import { ToastsComponent } from './toasts/toasts.component';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +20,7 @@ import { Observable } from 'rxjs';
     RouterLinkActive,
     NgForOf,
     AsyncPipe,
-    ToastsComponen,
+    ToastsComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -28,7 +35,7 @@ export class AppComponent {
     this.pads$ = this.padService.padsSubject.asObservable();
     this.pads$.subscribe((pads) => {
       if (this.router.url.startsWith('/completions')) {
-        const currentPadId = this.route.snapshot.queryParams['id'];
+        const currentPadId = this.route.snapshot.queryParams['id'] as string;
         if (!pads.find((p) => p.id == currentPadId)) {
           if (pads.length == 0) {
             void this.router.navigate(['/providers']);
@@ -45,7 +52,7 @@ export class AppComponent {
   onCreatePad(): void {
     const pad = this.padService.createPad();
     void this.router.navigate(['/completions'], {
-      queryParams: { id: pad.id ,
+      queryParams: { id: pad.id },
     });
   }
 }

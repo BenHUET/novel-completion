@@ -8,6 +8,9 @@
       "@angular/localize"
     ]
   },
+  "angularCompilerOptions": {
+    "strictTemplates": true
+  },
   "files": [
     "src/main.ts"
   ],
