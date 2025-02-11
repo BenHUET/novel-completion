@@ -1,7 +1,7 @@
 import {Component, HostListener, inject, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {OpenRouterService} from '../providers/openrouter/openrouter.service';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {ProviderRequest, ProviderResponse} from '../providers/provider.model';
+import {Message, ProviderRequest, ProviderResponse} from '../providers/provider.model';
 import {Observable, Subscription} from 'rxjs';
 import {NgIf} from '@angular/common';
 import {CompletionPadComponent} from './completion-pad/completion-pad.component';
@@ -110,6 +110,11 @@ export class CompletionsComponent implements OnInit {
   }
 
   run(): void {
+    this.isRunning = true;
+    this.reasoning = undefined;
+    const key = this.storageService.get(storage_or_apiKey) as string ?? '';
+    let query: Observable<ProviderResponse>;
+
     let request: ProviderRequest;
     switch (this.provider) {
       case 'openrouter':
@@ -119,78 +124,19 @@ export class CompletionsComponent implements OnInit {
         throw new Error("unsupported provider");
     }
 
-    this.isRunning = true;
-    this.reasoning = undefined;
-
-    const prompt = this.padComponent.quillEditor.getText();
-
     // hack : remove the last newline added by the browser
-    request.prompt = prompt.slice(0, -1);
+    request.messages = this.splitPrompt(this.padComponent.quillEditor.getText().slice(0, -1));
 
-    this.beforeQueryCharacterCount = request.prompt?.length;
+    // the prompt is the whole content excluding instructions
+    request.prompt = request.messages
+      .filter(p => p.role === 'assistant')
+      .map(m => m.content)
+      .join('');
 
-    const key = this.storageService.get(storage_or_apiKey) as string ?? '';
-
-    let query: Observable<ProviderResponse>;
+    // used to undo on retry
+    this.beforeQueryCharacterCount = request.prompt.length;
 
     if (request.chat_completions) {
-      // split text and instructions if any
-      const splitPrompt = [];
-      const regex = /<inst>(.*?)<\/inst>|([^<]+)/g;
-      let match;
-      while ((match = regex.exec(request.prompt)) !== null) {
-        if (match[1] && match[1].trim() !== '') {
-          splitPrompt.push({instruction: match[1]});
-        } else if (match[2]) {
-          const text = match[2].trim();
-          if (text !== '') {
-            splitPrompt.push({text: match[2].trim()});
-          }
-        }
-      }
-
-      request.messages = [{
-        role: "system",
-        content: "You act as a writing assistant, solely completing the user's text by picking up exactly where it stopped."
-      }];
-      let prefill: string | undefined;
-
-      // there is instructions from the user
-      if (splitPrompt.length > 1) {
-        splitPrompt.forEach(part => {
-          request.messages!.push({
-            role: part.text ? "assistant" : "user",
-            content: part.text ?? part.instruction
-          });
-        });
-
-        // if the prompt ends with instructions, the prefill is a few words of the text right above
-        // else, no need for a prefill
-        if (splitPrompt.at(-1)!.instruction) {
-          const lastPart = [...splitPrompt].reverse().find(p => p.text);
-          if (lastPart) {
-            prefill = lastPart.text!.split(' ').slice(-5).join(' ');
-          }
-        }
-      }
-      // no instructions
-      else {
-        request.messages.push({
-          role: "user",
-          content: request.prompt
-        });
-
-        // take the last few words as the prefill
-        prefill = request.prompt.split(' ').slice(-5).join(' ');
-      }
-
-      if (prefill) {
-        request.messages.push({
-          role: "assistant",
-          content: prefill
-        });
-      }
-
       request.prompt = undefined;
       query = this.providerService.getChatCompletions(request, key);
     } else {
@@ -199,7 +145,6 @@ export class CompletionsComponent implements OnInit {
     }
 
     let firstInsert = true;
-
     this.$querySubscription = query.subscribe(
       {
         next: (res: ProviderResponse) => {
@@ -232,6 +177,28 @@ export class CompletionsComponent implements OnInit {
         }
       }
     );
+  }
+
+  splitPrompt(prompt: string): Message[] {
+    const parts: Message[] = [];
+    const regex = /<sys>(.*?)<\/sys>|<inst>(.*?)<\/inst>|([^<]+)/g;
+
+    let match;
+    while ((match = regex.exec(prompt)) !== null) {
+      if (match[1] && match[1].trim() !== '') {
+        parts.push({role: 'system', content: match[1]});
+      } else if (match[2]) {
+        if (match[2] && match[2].trim() !== '') {
+          parts.push({role: 'user', content: match[2].trim()});
+        }
+      } else if (match[3]) {
+        if (match[3] && match[3].trim() !== '') {
+          parts.push({role: 'assistant', content: match[3].trim()});
+        }
+      }
+    }
+
+    return parts;
   }
 
   abort(): void {

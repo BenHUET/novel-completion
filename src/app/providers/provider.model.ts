@@ -25,7 +25,7 @@ export interface ProviderRequest {
   top_a?: number;
 }
 
-interface Message {
+export interface Message {
   role: 'user' | 'assistant' | 'system';
   content: string;
 }
