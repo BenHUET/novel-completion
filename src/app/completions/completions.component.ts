@@ -3,7 +3,7 @@ import {OpenRouterService} from '../providers/openrouter/openrouter.service';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Message, ProviderRequest, ProviderResponse} from '../providers/provider.model';
 import {Observable, Subscription} from 'rxjs';
-import {NgIf} from '@angular/common';
+import {DecimalPipe, NgIf} from '@angular/common';
 import {CompletionPadComponent} from './completion-pad/completion-pad.component';
 import {OpenRouterRequest} from '../providers/openrouter/openrouter.model';
 import {CompletionSettingsOpenRouterComponent} from './completion-settings/completion-settings-openrouter.component';
@@ -26,6 +26,7 @@ import {ToastService} from '../toasts/toast.service';
     CompletionSettingsOpenRouterComponent,
     CompletionSettingsOpenaiComponent,
     ReactiveFormsModule,
+    DecimalPipe,
   ],
   templateUrl: './completions.component.html',
   styleUrl: './completions.component.css'
@@ -144,13 +145,13 @@ export class CompletionsComponent implements OnInit {
       query = this.providerService.getCompletions(request, key);
     }
 
-    let firstInsert = true;
+    let generationId: string | undefined = undefined;
     this.$querySubscription = query.subscribe(
       {
         next: (res: ProviderResponse) => {
           if (res.text) {
-            this.padComponent.insert(res.text, firstInsert);
-            firstInsert = false;
+            this.padComponent.insert(res.text, generationId === undefined);
+            generationId = res.id;
           }
 
           if (res.reasoning) {
@@ -170,10 +171,15 @@ export class CompletionsComponent implements OnInit {
         },
         complete: () => {
           this.isRunning = false;
+
           this.toastService.show({
             type: 'success',
             message: 'request done',
           });
+
+          if (generationId) {
+            this.queryCosts(generationId);
+          }
         }
       }
     );
@@ -211,6 +217,20 @@ export class CompletionsComponent implements OnInit {
     this.toastService.show({
       type: 'warning',
       message: 'request aborted',
+    });
+  }
+
+  queryCosts(id: string): void {
+    const key = this.storageService.get(storage_or_apiKey) as string ?? '';
+
+    this.providerService.getGenerationCost(id, key).subscribe(res => {
+      if (this.pad.cost) {
+        this.pad.cost += res.total_cost;
+      } else {
+        this.pad.cost = res.total_cost;
+      }
+
+      this.savePad(false);
     });
   }
 

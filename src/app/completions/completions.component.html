@@ -32,7 +32,13 @@
 
     </div>
     <div>
-      <span class="d-inline-block mb-2">tokens : {{ tokenCount }}</span>
+      <div class="mb-2">
+        <span class="d-block">tokens : {{ tokenCount }}</span>
+        <span class="d-block">cost :
+          <span *ngIf="pad.cost">{{ pad.cost | number:'1.2-6' }}$</span>
+          <span *ngIf="!pad.cost">???</span>
+        </span>
+      </div>
       <div>
         <!-- delete pad -->
         <button (click)="openDeletePadModal(deleteModal)" class="btn btn-danger">

@@ -1,4 +1,5 @@
 export interface ProviderResponse {
+  id?: string;
   text?: string;
   reasoning?: string;
 }
@@ -34,4 +35,8 @@ export interface ProviderModel {
   id?: string;
   name?: string;
   max_context?: number;
+}
+
+export interface ProviderGeneration {
+  id: string;
 }

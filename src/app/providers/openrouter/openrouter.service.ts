@@ -4,6 +4,8 @@ import {ProviderService} from '../provider.service';
 import {EventSource} from 'eventsource'
 import {
   NonChatChoice,
+  OpenRouterGeneration,
+  OpenRouterGenerationResponse,
   OpenRouterModelProvidersResponse,
   OpenRouterModelsResponse,
   OpenRouterProvider,
@@ -11,7 +13,7 @@ import {
   OpenRouterResponse,
   StreamingChoice
 } from './openrouter.model';
-import {map, Observable, Subscriber} from 'rxjs';
+import {map, Observable, retry, Subscriber} from 'rxjs';
 import {ProviderModel, ProviderResponse} from '../provider.model';
 
 @Injectable({
@@ -31,6 +33,7 @@ export class OpenRouterService implements ProviderService {
       (chunk, observer) => {
         const choice = chunk.choices[0] as StreamingChoice;
         observer.next({
+          id: chunk.id,
           text: choice.delta.content,
           reasoning: choice.delta.reasoning
         });
@@ -71,6 +74,22 @@ export class OpenRouterService implements ProviderService {
             ...provider,
             selected: true
           }));
+        }
+      ));
+  }
+
+  getGenerationCost(id: string, key: string): Observable<OpenRouterGeneration> {
+    return this.http
+      .get<OpenRouterGenerationResponse>('/openrouter/api/v1/generation?id=' + id, {
+        headers: {
+          'Authorization': 'Bearer ' + key,
+          'Content-Type': 'application/json'
+        }
+      })
+      .pipe(retry(10))
+      .pipe<OpenRouterGeneration>(map(
+        res => {
+          return res.data;
         }
       ));
   }

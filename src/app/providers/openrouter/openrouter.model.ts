@@ -1,4 +1,4 @@
-import {ProviderModel, ProviderRequest} from '../provider.model';
+import {ProviderGeneration, ProviderModel, ProviderRequest} from '../provider.model';
 
 export interface OpenRouterRequest extends ProviderRequest {
   response_format?: { type: 'json_object' };
@@ -87,4 +87,12 @@ export interface OpenRouterProvider {
     completion: number;
   };
   supported_parameters: string[];
+}
+
+export interface OpenRouterGenerationResponse {
+  data: OpenRouterGeneration
+}
+
+export interface OpenRouterGeneration extends ProviderGeneration {
+  total_cost: number;
 }
