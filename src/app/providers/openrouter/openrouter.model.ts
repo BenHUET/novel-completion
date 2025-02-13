@@ -1,13 +1,10 @@
 import {
-  ProviderGeneration,
+  CompletionRequest,
+  CompletionResponse,
   ProviderModel,
-  ProviderRequest,
 } from '../provider.model';
 
-export interface OpenRouterRequest extends ProviderRequest {
-  response_format?: { type: 'json_object' };
-  stop?: string | string[];
-
+export interface OpenRouterCompletionRequest extends CompletionRequest {
   provider?: {
     order?: string[];
     ignore?: string[];
@@ -16,69 +13,35 @@ export interface OpenRouterRequest extends ProviderRequest {
   include_reasoning?: boolean;
 }
 
-export interface OpenRouterResponse {
-  id: string;
-  choices: (NonStreamingChoice | StreamingChoice | NonChatChoice)[];
-  created: number;
-  model: string;
-  object: 'chat.completion' | 'chat.completion.chunk';
-  system_fingerprint?: string;
-  usage?: ResponseUsage;
+export interface OpenRouterCompletionResponse extends CompletionResponse {
+  choices: (OpenRouterStreamingChoice | OpenRouterNonChatChoice)[];
 }
 
-interface ResponseUsage {
-  prompt_tokens: number;
-  completion_tokens: number;
-  total_tokens: number;
-}
-
-export interface NonChatChoice {
+export interface OpenRouterNonChatChoice {
   finish_reason: string | null;
   text: string;
-  error?: ErrorResponse;
+  error?: OpenRouterErrorResponse;
 }
 
-export interface NonStreamingChoice {
-  finish_reason: string | null;
-  message: {
-    content: string | null;
-    role: string;
-    tool_calls?: ToolCall[];
-  };
-  error?: ErrorResponse;
-}
-
-export interface StreamingChoice {
+export interface OpenRouterStreamingChoice {
   finish_reason: string | null;
   delta: {
     content?: string;
     reasoning?: string;
     role?: string;
-    tool_calls?: ToolCall[];
   };
-  error?: ErrorResponse;
+  error?: OpenRouterErrorResponse;
 }
 
-interface ErrorResponse {
+interface OpenRouterErrorResponse {
   code: number;
   message: string;
   metadata?: Record<string, unknown>;
 }
 
-interface ToolCall {
-  id: string;
-  type: 'function';
-  function: unknown;
-}
-
-export interface OpenRouterModelsResponse {
-  data: ProviderModel[];
-}
-
-export interface OpenRouterModelProvidersResponse {
-  data: {
-    endpoints: OpenRouterProvider[];
-  };
+export interface OpenRouterModel extends ProviderModel {
+  name: string;
+  max_context: number;
 }
 
 export interface OpenRouterProvider {
@@ -93,10 +56,7 @@ export interface OpenRouterProvider {
   supported_parameters: string[];
 }
 
-export interface OpenRouterGenerationResponse {
-  data: OpenRouterGeneration;
-}
-
-export interface OpenRouterGeneration extends ProviderGeneration {
+export interface OpenRouterGeneration {
+  id: string;
   total_cost: number;
 }

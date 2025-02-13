@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
+  OpenRouterCompletionRequest,
   OpenRouterProvider,
-  OpenRouterRequest,
 } from '../../providers/openrouter/openrouter.model';
 import { FormsModule } from '@angular/forms';
 import { OpenRouterService } from '../../providers/openrouter/openrouter.service';
@@ -35,8 +35,8 @@ import { or_defaultModel } from '../../app.consts';
   styleUrl: './completion-settings-openrouter.component.css',
 })
 export class CompletionSettingsOpenRouterComponent {
-  @Input() request: OpenRouterRequest = {};
-  @Output() requestChange = new EventEmitter<OpenRouterRequest>();
+  @Input() request: OpenRouterCompletionRequest = {};
+  @Output() requestChange = new EventEmitter<OpenRouterCompletionRequest>();
   models$ = new Observable<ProviderModel[]>();
 
   providersIsLoading = true;

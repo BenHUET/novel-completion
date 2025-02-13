@@ -3,18 +3,16 @@ import { HttpClient } from '@angular/common/http';
 import { ProviderService } from '../provider.service';
 import { EventSource } from 'eventsource';
 import {
-  NonChatChoice,
+  OpenRouterCompletionRequest,
+  OpenRouterCompletionResponse,
   OpenRouterGeneration,
-  OpenRouterGenerationResponse,
-  OpenRouterModelProvidersResponse,
-  OpenRouterModelsResponse,
+  OpenRouterModel,
+  OpenRouterNonChatChoice,
   OpenRouterProvider,
-  OpenRouterRequest,
-  OpenRouterResponse,
-  StreamingChoice,
+  OpenRouterStreamingChoice,
 } from './openrouter.model';
 import { map, Observable, retry, Subscriber } from 'rxjs';
-import { ProviderModel, ProviderResponse } from '../provider.model';
+import { CompletionResponse, ProviderModel } from '../provider.model';
 
 @Injectable({
   providedIn: 'root',
@@ -23,16 +21,16 @@ export class OpenRouterService implements ProviderService {
   constructor(private http: HttpClient) {}
 
   getChatCompletions(
-    request: OpenRouterRequest,
+    request: OpenRouterCompletionRequest,
     key: string,
-  ): Observable<ProviderResponse> {
+  ): Observable<CompletionResponse> {
     console.log(request);
     return this.getObservableEventSource(
       request,
       key,
       '/openrouter/api/v1/chat/completions',
       (chunk, observer) => {
-        const choice = chunk.choices[0] as StreamingChoice;
+        const choice = chunk.choices[0] as OpenRouterStreamingChoice;
         observer.next({
           id: chunk.id,
           text: choice.delta.content,
@@ -43,25 +41,27 @@ export class OpenRouterService implements ProviderService {
   }
 
   getCompletions(
-    request: OpenRouterRequest,
+    request: OpenRouterCompletionRequest,
     key: string,
-  ): Observable<ProviderResponse> {
+  ): Observable<CompletionResponse> {
     console.log(request);
     return this.getObservableEventSource(
       request,
       key,
       '/openrouter/api/v1/completions',
       (chunk, observer) => {
-        const text = (chunk.choices[0] as NonChatChoice).text;
+        const text = (chunk.choices[0] as OpenRouterNonChatChoice).text;
         if (text !== null)
-          observer.next({ text: (chunk.choices[0] as NonChatChoice).text });
+          observer.next({
+            text: (chunk.choices[0] as OpenRouterNonChatChoice).text,
+          });
       },
     );
   }
 
   getModels(): Observable<ProviderModel[]> {
     return this.http
-      .get<OpenRouterModelsResponse>('/openrouter/api/v1/models')
+      .get<{ data: OpenRouterModel[] }>('/openrouter/api/v1/models')
       .pipe<ProviderModel[]>(
         map((res) => {
           return res.data;
@@ -71,9 +71,11 @@ export class OpenRouterService implements ProviderService {
 
   getProviders(id: string): Observable<OpenRouterProvider[]> {
     return this.http
-      .get<OpenRouterModelProvidersResponse>(
-        '/openrouter/api/v1/models/' + id + '/endpoints',
-      )
+      .get<{
+        data: {
+          endpoints: OpenRouterProvider[];
+        };
+      }>('/openrouter/api/v1/models/' + id + '/endpoints')
       .pipe<OpenRouterProvider[]>(
         map((res) => {
           return res.data.endpoints.map((provider) => ({
@@ -86,7 +88,7 @@ export class OpenRouterService implements ProviderService {
 
   getGenerationCost(id: string, key: string): Observable<OpenRouterGeneration> {
     return this.http
-      .get<OpenRouterGenerationResponse>(
+      .get<{ data: OpenRouterGeneration }>(
         '/openrouter/api/v1/generation?id=' + id,
         {
           headers: {
@@ -104,15 +106,15 @@ export class OpenRouterService implements ProviderService {
   }
 
   private getObservableEventSource(
-    request: OpenRouterRequest,
+    request: OpenRouterCompletionRequest,
     key: string,
     url: string,
     onChunk: (
-      chunk: OpenRouterResponse,
-      observer: Subscriber<ProviderResponse>,
+      chunk: OpenRouterCompletionResponse,
+      observer: Subscriber<CompletionResponse>,
     ) => void,
-  ): Observable<ProviderResponse> {
-    return new Observable<ProviderResponse>((observer) => {
+  ): Observable<CompletionResponse> {
+    return new Observable<CompletionResponse>((observer) => {
       const eventSource = new EventSource(url, {
         fetch: (input, init): Promise<Response> =>
           fetch(input, {
@@ -132,7 +134,7 @@ export class OpenRouterService implements ProviderService {
           observer.complete();
         }
 
-        interface JsonResponse extends OpenRouterResponse {
+        interface JsonResponse extends OpenRouterCompletionResponse {
           error: { message: string };
         }
 
@@ -142,7 +144,7 @@ export class OpenRouterService implements ProviderService {
           throw new Error(json.error.message);
         }
 
-        onChunk(json as OpenRouterResponse, observer);
+        onChunk(json as OpenRouterCompletionResponse, observer);
       };
 
       eventSource.onerror = (error): void => {

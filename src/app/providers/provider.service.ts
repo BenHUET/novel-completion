@@ -1,20 +1,14 @@
-import {
-  ProviderGeneration,
-  ProviderRequest,
-  ProviderResponse,
-} from './provider.model';
+import { CompletionRequest, CompletionResponse } from './provider.model';
 import { Observable } from 'rxjs';
 
 export interface ProviderService {
   getChatCompletions(
-    request: ProviderRequest,
+    request: CompletionRequest,
     key: string,
-  ): Observable<ProviderResponse>;
+  ): Observable<CompletionResponse>;
 
   getCompletions(
-    request: ProviderRequest,
+    request: CompletionRequest,
     key: string,
-  ): Observable<ProviderResponse>;
-
-  getGenerationCost(id: string, key: string): Observable<ProviderGeneration>;
+  ): Observable<CompletionResponse>;
 }

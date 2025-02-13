@@ -14,14 +14,14 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import {
+  CompletionRequest,
+  CompletionResponse,
   Message,
-  ProviderRequest,
-  ProviderResponse,
 } from '../providers/provider.model';
 import { Observable, Subscription } from 'rxjs';
 import { DecimalPipe, NgIf } from '@angular/common';
 import { CompletionPadComponent } from './completion-pad/completion-pad.component';
-import { OpenRouterRequest } from '../providers/openrouter/openrouter.model';
+import { OpenRouterCompletionRequest } from '../providers/openrouter/openrouter.model';
 import { CompletionSettingsOpenRouterComponent } from './completion-settings/completion-settings-openrouter.component';
 import { getEncoding, Tiktoken } from 'js-tiktoken';
 import { StorageService } from '../storage/storage.service';
@@ -55,7 +55,7 @@ export class CompletionsComponent implements OnInit {
   @ViewChild(CompletionPadComponent) padComponent!: CompletionPadComponent;
 
   reasoning?: string;
-  defaultRequest: ProviderRequest = {
+  defaultRequest: CompletionRequest = {
     chat_completions: true,
     temperature: 0.5,
     max_tokens: 256,
@@ -69,7 +69,7 @@ export class CompletionsComponent implements OnInit {
     stream: true,
   };
   provider = 'openrouter';
-  openRouterRequest: OpenRouterRequest = {
+  openRouterRequest: OpenRouterCompletionRequest = {
     ...this.defaultRequest,
     include_reasoning: true,
   };
@@ -134,9 +134,9 @@ export class CompletionsComponent implements OnInit {
     this.isRunning = true;
     this.reasoning = undefined;
     const key = (this.storageService.get(storage_or_apiKey) as string) ?? '';
-    let query: Observable<ProviderResponse>;
+    let query: Observable<CompletionResponse>;
 
-    let request: ProviderRequest;
+    let request: CompletionRequest;
     switch (this.provider) {
       case 'openrouter':
         request = this.openRouterRequest;
@@ -169,7 +169,7 @@ export class CompletionsComponent implements OnInit {
 
     let generationId: string | undefined = undefined;
     this.$querySubscription = query.subscribe({
-      next: (res: ProviderResponse) => {
+      next: (res: CompletionResponse) => {
         if (res.text) {
           this.padComponent.insert(res.text, generationId === undefined);
           generationId = res.id;
