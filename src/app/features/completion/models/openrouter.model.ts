@@ -2,7 +2,7 @@ import {
   CompletionRequest,
   CompletionResponse,
   ProviderModel,
-} from '../provider.model';
+} from './provider.model';
 
 export interface OpenRouterCompletionRequest extends CompletionRequest {
   provider?: {

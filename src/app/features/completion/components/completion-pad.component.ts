@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ContentChange, QuillEditorComponent } from 'ngx-quill';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import Quill from 'quill';
-import './inferred.quill.blot';
-import { InferredBlot } from './inferred.quill.blot';
+import '../blots/inferred.quill.blot';
+import { InferredBlot } from '../blots/inferred.quill.blot';
 import Delta from 'quill-delta';
 
 @Component({

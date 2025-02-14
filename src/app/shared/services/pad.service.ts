@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { StorageService } from '../storage/storage.service';
-import { defaultPrompts, storage_pad, storage_pads_ids } from '../app.consts';
+import { StorageService } from '../../core/services/storage.service';
+import { defaultPrompts, storage_pad, storage_pads_ids } from '../consts';
 import { v4 as uuidv4 } from 'uuid';
-import { Pad } from './pad.model';
+import { Pad } from '../models/pad.model';
 import { BehaviorSubject } from 'rxjs';
 import Delta from 'quill-delta';
 

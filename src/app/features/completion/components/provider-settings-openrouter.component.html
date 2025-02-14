@@ -24,7 +24,7 @@
     </div>
   </ng-template>
 </div>
-<!-- providers -->
+<!-- provider-setup -->
 <div class="form-group mb-3">
   <span class="d-inline-block form-label">providers</span>
   <!-- chat completion -->
@@ -61,7 +61,7 @@
         <strong>{{ provider.provider_name }}</strong>
         <small class="d-inline-flex justify-content-between w-100">
           <span
-          >{{ provider.context_length | shortNumber }} /{{
+            >{{ provider.context_length | shortNumber }} /{{
               provider.max_completion_tokens
                 ? (provider.max_completion_tokens | shortNumber)
                 : '??'
@@ -91,4 +91,7 @@
     </div>
   </ng-template>
 </div>
-<app-provider-settings [(request)]="this.request" [capabilities]="this.completionCapabilities"></app-provider-settings>
+<app-completion-parameters
+  [(request)]="this.request"
+  [capabilities]="this.completionCapabilities"
+></app-completion-parameters>

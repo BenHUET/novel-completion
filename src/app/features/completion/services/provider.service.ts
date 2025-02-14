@@ -1,4 +1,7 @@
-import { CompletionRequest, CompletionResponse } from './provider.model';
+import {
+  CompletionRequest,
+  CompletionResponse,
+} from '../models/provider.model';
 import { Observable } from 'rxjs';
 
 export interface ProviderService {

@@ -5,15 +5,15 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { StorageService } from '../../storage/storage.service';
-import { storage_or_apiKey } from '../../app.consts';
+import { StorageService } from '../../../core/services/storage.service';
+import { storage_or_apiKey } from '../../../shared/consts';
 
 @Component({
-  selector: 'app-providers-openrouter',
+  selector: 'app-provider-setup-openrouter',
   imports: [FormsModule, ReactiveFormsModule],
-  templateUrl: './openrouter.component.html',
+  templateUrl: './openrouter-setup.component.html',
 })
-export class OpenRouterComponent {
+export class OpenRouterSetupComponent {
   form: FormGroup;
 
   constructor(private storageService: StorageService) {

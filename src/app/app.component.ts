@@ -7,10 +7,10 @@ import {
   RouterOutlet,
 } from '@angular/router';
 import { AsyncPipe, NgForOf } from '@angular/common';
-import { Pad } from './pads/pad.model';
-import { PadService } from './pads/pad.service';
+import { Pad } from './shared/models/pad.model';
+import { PadService } from './shared/services/pad.service';
 import { Observable } from 'rxjs';
-import { ToastsComponent } from './toasts/toasts.component';
+import { ToastsComponent } from './core/components/toasts.component';
 
 @Component({
   selector: 'app-root',
@@ -33,7 +33,7 @@ export class AppComponent {
   constructor(private padService: PadService) {
     this.pads$ = this.padService.padsSubject.asObservable();
     this.pads$.subscribe((pads) => {
-      if (this.router.url.startsWith('/completions')) {
+      if (this.router.url.startsWith('/completion')) {
         const currentPadId = this.route.snapshot.queryParams['id'] as string;
         if (!pads.find((p) => p.id == currentPadId)) {
           if (pads.length == 0) {

@@ -3,7 +3,10 @@ type Enum = Record<string, number | string>;
 
 type EnumIteratorCallback<T> = (value: T, key?: string) => void;
 
-function enumIterator<T>(e: Enum, callback: EnumIteratorCallback<T>): void {
+export function enumIterator<T>(
+  e: Enum,
+  callback: EnumIteratorCallback<T>,
+): void {
   const keys = Object.keys(e).filter((k) => isNaN(Number(k)));
   for (const key of keys) {
     callback(e[key] as T, key);

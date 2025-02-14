@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   OpenRouterCompletionRequest,
   OpenRouterProvider,
-} from '../../providers/openrouter/openrouter.model';
+} from '../models/openrouter.model';
 import { FormsModule } from '@angular/forms';
-import { OpenRouterService } from '../../providers/openrouter/openrouter.service';
+import { OpenRouterService } from '../services/openrouter.service';
 import { AsyncPipe, DecimalPipe, NgForOf, NgIf } from '@angular/common';
 import { Observable } from 'rxjs';
 import { OrderModule } from 'ngx-order-pipe';
@@ -14,13 +14,11 @@ import {
   CdkDropList,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
-import { ShortNumberPipe } from '../../shared/short-number.pipe';
-import {
-  CompletionCapability,
-  ProviderModel,
-} from '../../providers/provider.model';
-import { or_defaultModel } from '../../app.consts';
-import { CompletionSettingsComponent } from '../completion-settings/completion-settings.component';
+import { ShortNumberPipe } from '../../../shared/pipes/short-number.pipe';
+import { CompletionCapability, ProviderModel } from '../models/provider.model';
+import { or_defaultModel } from '../../../shared/consts';
+import { CompletionParametersComponent } from './completion-parameters.component';
+import { enumIterator } from '../../../shared/helpers/enum.helper';
 
 @Component({
   selector: 'app-provider-settings-openrouter',
@@ -34,7 +32,7 @@ import { CompletionSettingsComponent } from '../completion-settings/completion-s
     CdkDrag,
     ShortNumberPipe,
     DecimalPipe,
-    CompletionSettingsComponent,
+    CompletionParametersComponent,
   ],
   templateUrl: './provider-settings-openrouter.component.html',
 })

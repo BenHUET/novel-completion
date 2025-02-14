@@ -1,7 +1,10 @@
 <!-- temp -->
-<div class="form-group mb-1" *ngIf="this.hasCapability(CompletionCapability.temperature)">
+<div
+  class="form-group mb-1"
+  *ngIf="this.hasCapability(CompletionCapability.temperature)"
+>
   <label class="form-label" for="temperature"
-  >temperature : {{ request.temperature }}</label
+    >temperature : {{ request.temperature }}</label
   >
   <input
     [(ngModel)]="request.temperature"
@@ -16,7 +19,10 @@
   />
 </div>
 <!-- max_tokens -->
-<div class="form-group mb-3" *ngIf="this.hasCapability(CompletionCapability.max_tokens)">
+<div
+  class="form-group mb-3"
+  *ngIf="this.hasCapability(CompletionCapability.max_tokens)"
+>
   <label class="form-label" for="max_tokens">max tokens</label>
   <input
     [(ngModel)]="request.max_tokens"
@@ -29,7 +35,10 @@
   />
 </div>
 <!-- top_p -->
-<div class="form-group mb-1" *ngIf="this.hasCapability(CompletionCapability.top_p)">
+<div
+  class="form-group mb-1"
+  *ngIf="this.hasCapability(CompletionCapability.top_p)"
+>
   <label class="form-label" for="top_p">top p : {{ request.top_p }}</label>
   <input
     [(ngModel)]="request.top_p"
@@ -44,7 +53,10 @@
   />
 </div>
 <!-- top_k -->
-<div class="form-group mb-3" *ngIf="this.hasCapability(CompletionCapability.top_k)">
+<div
+  class="form-group mb-3"
+  *ngIf="this.hasCapability(CompletionCapability.top_k)"
+>
   <label class="form-label" for="top_k">top k</label>
   <input
     [(ngModel)]="request.top_k"
@@ -57,7 +69,10 @@
   />
 </div>
 <!-- min_p -->
-<div class="form-group mb-1" *ngIf="this.hasCapability(CompletionCapability.min_p)">
+<div
+  class="form-group mb-1"
+  *ngIf="this.hasCapability(CompletionCapability.min_p)"
+>
   <label class="form-label" for="min_p">min p : {{ request.min_p }}</label>
   <input
     [(ngModel)]="request.min_p"
@@ -72,7 +87,10 @@
   />
 </div>
 <!-- top_a -->
-<div class="form-group mb-1" *ngIf="this.hasCapability(CompletionCapability.top_a)">
+<div
+  class="form-group mb-1"
+  *ngIf="this.hasCapability(CompletionCapability.top_a)"
+>
   <label class="form-label" for="top_a">top a : {{ request.top_a }}</label>
   <input
     [(ngModel)]="request.top_a"
@@ -87,9 +105,12 @@
   />
 </div>
 <!-- frequency_penalty -->
-<div class="form-group mb-3" *ngIf="this.hasCapability(CompletionCapability.frequence_penalty)">
+<div
+  class="form-group mb-3"
+  *ngIf="this.hasCapability(CompletionCapability.frequence_penalty)"
+>
   <label class="form-label" for="frequency_penalty"
-  >frequency penalty : {{ request.frequency_penalty }}</label
+    >frequency penalty : {{ request.frequency_penalty }}</label
   >
   <input
     [(ngModel)]="request.frequency_penalty"
@@ -104,9 +125,12 @@
   />
 </div>
 <!-- presence_penalty -->
-<div class="form-group mb-3" *ngIf="this.hasCapability(CompletionCapability.presence_penalty)">
+<div
+  class="form-group mb-3"
+  *ngIf="this.hasCapability(CompletionCapability.presence_penalty)"
+>
   <label class="form-label" for="presence_penalty"
-  >presence penalty : {{ request.presence_penalty }}</label
+    >presence penalty : {{ request.presence_penalty }}</label
   >
   <input
     [(ngModel)]="request.presence_penalty"
@@ -121,9 +145,12 @@
   />
 </div>
 <!-- repetition_penalty -->
-<div class="form-group mb-3" *ngIf="this.hasCapability(CompletionCapability.repetition_penalty)">
+<div
+  class="form-group mb-3"
+  *ngIf="this.hasCapability(CompletionCapability.repetition_penalty)"
+>
   <label class="form-label" for="repetition_penalty"
-  >repetition penalty : {{ request.repetition_penalty }}</label
+    >repetition penalty : {{ request.repetition_penalty }}</label
   >
   <input
     [(ngModel)]="request.repetition_penalty"

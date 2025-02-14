@@ -1,15 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { OpenRouterCompletionRequest } from '../../providers/openrouter/openrouter.model';
+import { OpenRouterCompletionRequest } from '../models/openrouter.model';
 import { FormsModule } from '@angular/forms';
-import { CompletionCapability } from '../../providers/provider.model';
+import { CompletionCapability } from '../models/provider.model';
 import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-provider-settings',
+  selector: 'app-completion-parameters',
   imports: [FormsModule, NgIf],
-  templateUrl: './completion-settings.component.html',
+  templateUrl: './completion-parameters.component.html',
 })
-export class CompletionSettingsComponent {
+export class CompletionParametersComponent {
   @Input() request: OpenRouterCompletionRequest = {};
   @Output() requestChange = new EventEmitter<OpenRouterCompletionRequest>();
 

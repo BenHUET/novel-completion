@@ -6,7 +6,7 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { OpenRouterService } from '../providers/openrouter/openrouter.service';
+import { OpenRouterService } from './services/openrouter.service';
 import {
   FormControl,
   FormGroup,
@@ -17,24 +17,24 @@ import {
   CompletionRequest,
   CompletionResponse,
   Message,
-} from '../providers/provider.model';
+} from './models/provider.model';
 import { Observable, Subscription } from 'rxjs';
 import { DecimalPipe, NgIf } from '@angular/common';
-import { CompletionPadComponent } from './completion-pad/completion-pad.component';
-import { OpenRouterCompletionRequest } from '../providers/openrouter/openrouter.model';
-import { ProviderSettingsOpenrouterComponent } from './provider-settings/provider-settings-openrouter.component';
+import { CompletionPadComponent } from './components/completion-pad.component';
+import { OpenRouterCompletionRequest } from './models/openrouter.model';
+import { ProviderSettingsOpenrouterComponent } from './components/provider-settings-openrouter.component';
 import { getEncoding, Tiktoken } from 'js-tiktoken';
-import { StorageService } from '../storage/storage.service';
-import { storage_or_apiKey } from '../app.consts';
-import { ProviderSettingsOpenAIComponent } from './provider-settings/provider-settings-openai.component';
+import { StorageService } from '../../core/services/storage.service';
+import { storage_or_apiKey } from '../../shared/consts';
+import { ProviderSettingsOpenAIComponent } from './components/provider-settings-openai.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Pad } from '../pads/pad.model';
-import { PadService } from '../pads/pad.service';
-import { ToastService } from '../toasts/toast.service';
+import { Pad } from '../../shared/models/pad.model';
+import { PadService } from '../../shared/services/pad.service';
+import { ToastService } from '../../core/services/toast.service';
 
 @Component({
-  selector: 'app-completions',
+  selector: 'app-completion',
   imports: [
     FormsModule,
     NgIf,
@@ -44,9 +44,9 @@ import { ToastService } from '../toasts/toast.service';
     ReactiveFormsModule,
     DecimalPipe,
   ],
-  templateUrl: './completions.component.html',
+  templateUrl: './completion.component.html',
 })
-export class CompletionsComponent implements OnInit {
+export class CompletionComponent implements OnInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
   modalService = inject(NgbModal);

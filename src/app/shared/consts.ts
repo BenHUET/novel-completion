@@ -1,4 +1,4 @@
-// storage
+// services
 export const storage_or_apiKey = 'or_apiKey';
 export const storage_pads_ids = 'pads_ids';
 export const storage_pad = 'pads_{id}';

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ProviderService } from '../provider.service';
+import { ProviderService } from './provider.service';
 import { EventSource } from 'eventsource';
 import {
   OpenRouterCompletionRequest,
@@ -10,9 +10,9 @@ import {
   OpenRouterNonChatChoice,
   OpenRouterProvider,
   OpenRouterStreamingChoice,
-} from './openrouter.model';
+} from '../models/openrouter.model';
 import { map, Observable, retry, Subscriber } from 'rxjs';
-import { CompletionResponse, ProviderModel } from '../provider.model';
+import { CompletionResponse, ProviderModel } from '../models/provider.model';
 
 @Injectable({
   providedIn: 'root',
