@@ -15,11 +15,15 @@ import {
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { ShortNumberPipe } from '../../shared/short-number.pipe';
-import { ProviderModel } from '../../providers/provider.model';
+import {
+  CompletionCapability,
+  ProviderModel,
+} from '../../providers/provider.model';
 import { or_defaultModel } from '../../app.consts';
+import { CompletionSettingsComponent } from '../completion-settings/completion-settings.component';
 
 @Component({
-  selector: 'app-completion-settings-openrouter',
+  selector: 'app-provider-settings-openrouter',
   imports: [
     FormsModule,
     NgForOf,
@@ -30,17 +34,20 @@ import { or_defaultModel } from '../../app.consts';
     CdkDrag,
     ShortNumberPipe,
     DecimalPipe,
+    CompletionSettingsComponent,
   ],
-  templateUrl: './completion-settings-openrouter.component.html',
-  styleUrl: './completion-settings-openrouter.component.css',
+  templateUrl: './provider-settings-openrouter.component.html',
+  styleUrl: './provider-settings-openrouter.component.css',
 })
-export class CompletionSettingsOpenRouterComponent {
+export class ProviderSettingsOpenrouterComponent {
   @Input() request: OpenRouterCompletionRequest = {};
   @Output() requestChange = new EventEmitter<OpenRouterCompletionRequest>();
   models$ = new Observable<ProviderModel[]>();
 
   providersIsLoading = true;
   providers: OpenRouterProvider[] = [];
+
+  completionCapabilities: CompletionCapability[] = [];
 
   constructor(private openRouterService: OpenRouterService) {
     (this.models$ = this.openRouterService.getModels()).subscribe({

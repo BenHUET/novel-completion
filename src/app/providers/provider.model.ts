@@ -31,3 +31,17 @@ export interface Message {
 export interface ProviderModel {
   id: string;
 }
+
+export enum CompletionCapability {
+  temperature,
+  max_tokens,
+  top_p,
+  top_k,
+  top_a,
+  min_p,
+  frequence_penalty,
+  presence_penalty,
+  repetition_penalty,
+  logit_bias,
+  top_logprobs,
+}

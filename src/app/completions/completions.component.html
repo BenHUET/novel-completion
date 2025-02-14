@@ -80,15 +80,15 @@
       <option value="openai">OpenAI</option>
     </select>
     <hr />
-    <app-completion-settings-openrouter
+    <app-provider-settings-openrouter
       *ngIf="provider === 'openrouter'"
       [(request)]="openRouterRequest"
       class="overflow-y-scroll h-100"
-    ></app-completion-settings-openrouter>
-    <app-completion-settings-openai
+    ></app-provider-settings-openrouter>
+    <app-provider-settings-openai
       *ngIf="provider === 'openai'"
       class="overflow-y-scroll h-100"
-    ></app-completion-settings-openai>
+    ></app-provider-settings-openai>
   </div>
   <app-completion-pad
     (editorChange)="onContentChange()"

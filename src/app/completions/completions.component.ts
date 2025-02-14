@@ -22,11 +22,11 @@ import { Observable, Subscription } from 'rxjs';
 import { DecimalPipe, NgIf } from '@angular/common';
 import { CompletionPadComponent } from './completion-pad/completion-pad.component';
 import { OpenRouterCompletionRequest } from '../providers/openrouter/openrouter.model';
-import { CompletionSettingsOpenRouterComponent } from './completion-settings/completion-settings-openrouter.component';
+import { ProviderSettingsOpenrouterComponent } from './provider-settings/provider-settings-openrouter.component';
 import { getEncoding, Tiktoken } from 'js-tiktoken';
 import { StorageService } from '../storage/storage.service';
 import { storage_or_apiKey } from '../app.consts';
-import { CompletionSettingsOpenaiComponent } from './completion-settings/completion-settings-openai.component';
+import { ProviderSettingsOpenAIComponent } from './provider-settings/provider-settings-openai.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Pad } from '../pads/pad.model';
@@ -39,8 +39,8 @@ import { ToastService } from '../toasts/toast.service';
     FormsModule,
     NgIf,
     CompletionPadComponent,
-    CompletionSettingsOpenRouterComponent,
-    CompletionSettingsOpenaiComponent,
+    ProviderSettingsOpenrouterComponent,
+    ProviderSettingsOpenAIComponent,
     ReactiveFormsModule,
     DecimalPipe,
   ],

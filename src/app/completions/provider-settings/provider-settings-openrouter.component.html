@@ -1,0 +1,94 @@
+<!--  models -->
+<div class="form-group mb-3">
+  <label class="form-label" for="models">model</label>
+  <select
+    (change)="onModelChanged()"
+    *ngIf="models$ | async as models; else loadingModels"
+    [(ngModel)]="request.model"
+    class="form-select"
+    id="models"
+    required
+  >
+    <option
+      *ngFor="let m of models | orderBy: 'name' : false : true"
+      [ngValue]="m.id"
+    >
+      {{ m.name }}
+    </option>
+  </select>
+  <ng-template #loadingModels>
+    <div>
+      <span class="spinner-border spinner-border-sm ms-1" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </span>
+    </div>
+  </ng-template>
+</div>
+<!-- providers -->
+<div class="form-group mb-3">
+  <span class="d-inline-block form-label">providers</span>
+  <!-- chat completion -->
+  <div class="form-check mb-3">
+    <input
+      [(ngModel)]="request.chat_completions"
+      class="form-check-input"
+      id="useChatCompletion"
+      type="checkbox"
+    />
+    <label class="form-check-label" for="useChatCompletion">
+      use chat completion
+    </label>
+  </div>
+  <div
+    (cdkDropListDropped)="onProviderReordered($event)"
+    *ngIf="!providersIsLoading; else loadingProviders"
+    cdkDropList
+    class="list-group"
+  >
+    <label
+      *ngFor="let provider of providers"
+      cdkDrag
+      class="list-group-item d-flex gap-2"
+    >
+      <input
+        (change)="onProviderChanged($event, provider)"
+        checked
+        class="form-check-input flex-shrink-0"
+        type="checkbox"
+        value="{{ provider.provider_name }}"
+      />
+      <span class="w-100">
+        <strong>{{ provider.provider_name }}</strong>
+        <small class="d-inline-flex justify-content-between w-100">
+          <span
+          >{{ provider.context_length | shortNumber }} /{{
+              provider.max_completion_tokens
+                ? (provider.max_completion_tokens | shortNumber)
+                : '??'
+            }}</span
+          >
+          <span>
+            {{ provider.pricing.prompt * 1000000 | number: '1.2-2' }}
+            $/{{ provider.pricing.completion * 1000000 | number: '1.2-2' }}$
+          </span>
+        </small>
+      </span>
+      <svg
+        class="bi pe-none me-2 float-end ms-auto align-self-center"
+        fill="currentColor"
+        height="16"
+        width="16"
+      >
+        <use xlink:href="/bootstrap-icons.svg#grip-vertical"></use>
+      </svg>
+    </label>
+  </div>
+  <ng-template #loadingProviders>
+    <div>
+      <span class="spinner-border spinner-border-sm ms-1" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </span>
+    </div>
+  </ng-template>
+</div>
+<app-provider-settings [(request)]="this.request" [capabilities]="this.completionCapabilities"></app-provider-settings>
