@@ -23,7 +23,6 @@ import { ToastsComponent } from './toasts/toasts.component';
     ToastsComponent,
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
 })
 export class AppComponent {
   router = inject(Router);

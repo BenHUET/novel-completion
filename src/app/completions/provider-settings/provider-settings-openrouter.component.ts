@@ -37,7 +37,6 @@ import { CompletionSettingsComponent } from '../completion-settings/completion-s
     CompletionSettingsComponent,
   ],
   templateUrl: './provider-settings-openrouter.component.html',
-  styleUrl: './provider-settings-openrouter.component.css',
 })
 export class ProviderSettingsOpenrouterComponent {
   @Input() request: OpenRouterCompletionRequest = {};
