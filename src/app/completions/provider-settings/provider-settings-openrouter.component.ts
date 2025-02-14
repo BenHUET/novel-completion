@@ -73,6 +73,7 @@ export class ProviderSettingsOpenrouterComponent {
       next: (res: OpenRouterProvider[]) => {
         this.providers = res;
         this.updateRequestProviders();
+        this.updateCapabilities();
         this.providersIsLoading = false;
       },
       error: (err: unknown) => {
@@ -89,6 +90,7 @@ export class ProviderSettingsOpenrouterComponent {
   onProviderChanged($event: Event, provider: OpenRouterProvider): void {
     provider.selected = !provider.selected;
     this.updateRequestProviders();
+    this.updateCapabilities();
   }
 
   updateRequestProviders(): void {
@@ -98,7 +100,24 @@ export class ProviderSettingsOpenrouterComponent {
         .filter((p) => p.selected)
         .map((p) => p.provider_name),
     };
-
     this.requestChange.emit(this.request);
+  }
+
+  updateCapabilities(): void {
+    this.completionCapabilities = [];
+    this.providers
+      .filter((p) => p.selected)
+      .forEach((p) => {
+        enumIterator<CompletionCapability>(
+          CompletionCapability,
+          (value: CompletionCapability, key?: string): void => {
+            if (key) {
+              if (p.supported_parameters.includes(key)) {
+                this.completionCapabilities.push(value);
+              }
+            }
+          },
+        );
+      });
   }
 }

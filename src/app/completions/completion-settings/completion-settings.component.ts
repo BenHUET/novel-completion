@@ -16,10 +16,6 @@ export class CompletionSettingsComponent {
   @Input() capabilities: CompletionCapability[] = [];
 
   hasCapability(capability: CompletionCapability): boolean {
-    if (this.capabilities.length == 0) {
-      return true;
-    }
-
     return this.capabilities.includes(capability);
   }
 
