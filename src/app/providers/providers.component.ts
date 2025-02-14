@@ -5,6 +5,5 @@ import { OpenRouterComponent } from './openrouter/openrouter.component';
   selector: 'app-providers',
   imports: [OpenRouterComponent],
   templateUrl: './providers.component.html',
-  styleUrl: './providers.component.css',
 })
 export class ProvidersComponent {}

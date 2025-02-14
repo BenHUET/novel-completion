@@ -8,7 +8,6 @@ import { NgIf } from '@angular/common';
   selector: 'app-provider-settings',
   imports: [FormsModule, NgIf],
   templateUrl: './completion-settings.component.html',
-  styleUrl: './completion-settings.component.css',
 })
 export class CompletionSettingsComponent {
   @Input() request: OpenRouterCompletionRequest = {};

@@ -12,7 +12,6 @@ import { storage_or_apiKey } from '../../app.consts';
   selector: 'app-providers-openrouter',
   imports: [FormsModule, ReactiveFormsModule],
   templateUrl: './openrouter.component.html',
-  styleUrl: './openrouter.component.css',
 })
 export class OpenRouterComponent {
   form: FormGroup;

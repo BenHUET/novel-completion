@@ -45,7 +45,6 @@ import { ToastService } from '../toasts/toast.service';
     DecimalPipe,
   ],
   templateUrl: './completions.component.html',
-  styleUrl: './completions.component.cs',
 })
 export class CompletionsComponent implements OnInit {
   route = inject(ActivatedRoute);
