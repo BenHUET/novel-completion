@@ -17,21 +17,24 @@ import {
   CompletionRequest,
   CompletionResponse,
   Message,
-} from './models/provider.model';
+} from './models/completion.model';
 import { Observable, Subscription } from 'rxjs';
 import { DecimalPipe, NgIf } from '@angular/common';
 import { CompletionPadComponent } from './components/completion-pad.component';
 import { OpenRouterCompletionRequest } from './models/openrouter.model';
-import { ProviderSettingsOpenrouterComponent } from './components/provider-settings-openrouter.component';
+import { ProviderSettingsOpenRouterComponent } from './components/provider-settings-openrouter.component';
 import { getEncoding, Tiktoken } from 'js-tiktoken';
 import { StorageService } from '../../core/services/storage.service';
-import { storage_or_apiKey } from '../../shared/consts';
+import { storage_oai_apiKey, storage_or_apiKey } from '../../shared/consts';
 import { ProviderSettingsOpenAIComponent } from './components/provider-settings-openai.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Pad } from '../../shared/models/pad.model';
 import { PadService } from '../../shared/services/pad.service';
 import { ToastService } from '../../core/services/toast.service';
+import { OpenAIService } from './services/openai.service';
+import { ProviderService } from './services/provider.service';
+import { OpenAICompletionRequest } from './models/openai.model';
 
 @Component({
   selector: 'app-completion',
@@ -39,7 +42,7 @@ import { ToastService } from '../../core/services/toast.service';
     FormsModule,
     NgIf,
     CompletionPadComponent,
-    ProviderSettingsOpenrouterComponent,
+    ProviderSettingsOpenRouterComponent,
     ProviderSettingsOpenAIComponent,
     ReactiveFormsModule,
     DecimalPipe,
@@ -53,45 +56,56 @@ export class CompletionComponent implements OnInit {
 
   @ViewChild(CompletionPadComponent) padComponent!: CompletionPadComponent;
 
+  encoder: Tiktoken = getEncoding('o200k_base');
+  pad!: Pad;
   reasoning?: string;
+  tokenCount = 0;
+  provider!: 'openrouter' | 'openai';
+  providerService!: ProviderService;
+
   defaultRequest: CompletionRequest = {
-    chat_completions: true,
     temperature: 0.5,
     max_tokens: 256,
     top_p: 1,
-    top_k: 0,
     frequency_penalty: 0,
     presence_penalty: 0,
-    repetition_penalty: 1,
-    min_p: 0,
-    top_a: 0,
     stream: true,
   };
-  provider = 'openrouter';
   openRouterRequest: OpenRouterCompletionRequest = {
     ...this.defaultRequest,
+    top_k: 0,
+    top_a: 0,
+    min_p: 0,
+    repetition_penalty: 1,
+    chat_completions: true,
     include_reasoning: true,
   };
+  openAIRequest: OpenAICompletionRequest = {
+    ...this.defaultRequest,
+    chat_completions: true,
+  };
+
   isInitializing = true;
   isRunning = false;
   isRetryable = false;
   beforeQueryCharacterCount = 0;
-  encoder: Tiktoken = getEncoding('o200k_base');
-  tokenCount = 0;
-  $querySubscription?: Subscription;
-  queryParams$!: Subscription;
-  pad!: Pad;
+  querySubscription?: Subscription;
+
   formEditPad = new FormGroup<{
     label: FormControl<string | null>;
   }>({ label: new FormControl<string>('') });
 
   constructor(
-    private providerService: OpenRouterService,
+    private openRouterService: OpenRouterService,
+    private openAIService: OpenAIService,
     private storageService: StorageService,
     private padService: PadService,
     private toastService: ToastService,
   ) {
-    this.queryParams$ = this.route.queryParams.subscribe((params) => {
+    this.provider = 'openrouter';
+    this.onProviderChange();
+
+    this.route.queryParams.subscribe((params) => {
       this.loadPad(params['id'] as string);
       this.abort();
       this.formEditPad.get('label')!.setValue(this.pad.label);
@@ -124,6 +138,16 @@ export class CompletionComponent implements OnInit {
     }
   }
 
+  onProviderChange(): void {
+    switch (this.provider) {
+      case 'openrouter':
+        this.providerService = this.openRouterService;
+        break;
+      case 'openai':
+        this.providerService = this.openAIService;
+    }
+  }
+
   retry(): void {
     this.padComponent.undo();
     this.run();
@@ -132,16 +156,18 @@ export class CompletionComponent implements OnInit {
   run(): void {
     this.isRunning = true;
     this.reasoning = undefined;
-    const key = (this.storageService.get(storage_or_apiKey) as string) ?? '';
     let query: Observable<CompletionResponse>;
+
+    const key = this.getApiKey();
 
     let request: CompletionRequest;
     switch (this.provider) {
       case 'openrouter':
         request = this.openRouterRequest;
         break;
-      default:
-        throw new Error('unsupported provider');
+      case 'openai':
+        request = this.openAIRequest;
+        break;
     }
 
     // hack : remove the last newline added by the browser
@@ -166,8 +192,10 @@ export class CompletionComponent implements OnInit {
       query = this.providerService.getCompletions(request, key);
     }
 
+    console.log(request);
+
     let generationId: string | undefined = undefined;
-    this.$querySubscription = query.subscribe({
+    this.querySubscription = query.subscribe({
       next: (res: CompletionResponse) => {
         if (res.text) {
           this.padComponent.insert(res.text, generationId === undefined);
@@ -206,7 +234,8 @@ export class CompletionComponent implements OnInit {
 
   splitPrompt(prompt: string): Message[] {
     const parts: Message[] = [];
-    const regex = /<sys>(.*?)<\/sys>|<inst>(.*?)<\/inst>|([^<]+)/g;
+    const regex =
+      /<sys>(.*?)<\/sys>|<inst>(.*?)<\/inst>|<dev>(.*?)<\/dev>|([^<]+)/g;
 
     let match;
     while ((match = regex.exec(prompt)) !== null) {
@@ -218,7 +247,11 @@ export class CompletionComponent implements OnInit {
         }
       } else if (match[3]) {
         if (match[3] && match[3].trim() !== '') {
-          parts.push({ role: 'assistant', content: match[3].trim() });
+          parts.push({ role: 'developer', content: match[3].trim() });
+        }
+      } else if (match[4]) {
+        if (match[4] && match[4].trim() !== '') {
+          parts.push({ role: 'assistant', content: match[4].trim() });
         }
       }
     }
@@ -231,7 +264,7 @@ export class CompletionComponent implements OnInit {
       return;
     }
 
-    this.$querySubscription?.unsubscribe();
+    this.querySubscription?.unsubscribe();
     this.isRunning = false;
     this.toastService.show({
       type: 'warning',
@@ -240,12 +273,16 @@ export class CompletionComponent implements OnInit {
   }
 
   queryCosts(id: string): void {
-    const key = (this.storageService.get(storage_or_apiKey) as string) ?? '';
+    const key = this.getApiKey();
 
-    this.providerService.getGenerationCost(id, key).subscribe((res) => {
-      this.pad.cost = res.total_cost;
-      this.savePad(false);
-    });
+    try {
+      this.providerService.getGenerationCost(id, key).subscribe((res) => {
+        this.pad.cost = res.total_cost;
+        this.savePad(false);
+      });
+    } catch (_) {
+      // do nothing if the provider does not provide a way to get costs from API
+    }
   }
 
   loadPad(id: string): void {
@@ -262,6 +299,20 @@ export class CompletionComponent implements OnInit {
 
   deletePad(): void {
     this.padService.removePad(this.pad.id);
+  }
+
+  getApiKey(): string {
+    let storageKey;
+    switch (this.provider) {
+      case 'openrouter':
+        storageKey = storage_or_apiKey;
+        break;
+      case 'openai':
+        storageKey = storage_oai_apiKey;
+        break;
+    }
+
+    return (this.storageService.get(storageKey) as string) ?? '';
   }
 
   @HostListener('document:keydown', ['$event'])

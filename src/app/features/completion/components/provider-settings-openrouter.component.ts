@@ -15,10 +15,11 @@ import {
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { ShortNumberPipe } from '../../../shared/pipes/short-number.pipe';
-import { CompletionCapability, ProviderModel } from '../models/provider.model';
+import { ProviderModel } from '../models/provider.model';
 import { or_defaultModel } from '../../../shared/consts';
 import { CompletionParametersComponent } from './completion-parameters.component';
 import { enumIterator } from '../../../shared/helpers/enum.helper';
+import { CompletionCapability } from '../models/completion.model';
 
 @Component({
   selector: 'app-provider-settings-openrouter',
@@ -36,7 +37,7 @@ import { enumIterator } from '../../../shared/helpers/enum.helper';
   ],
   templateUrl: './provider-settings-openrouter.component.html',
 })
-export class ProviderSettingsOpenrouterComponent {
+export class ProviderSettingsOpenRouterComponent {
   @Input() request: OpenRouterCompletionRequest = {};
   @Output() requestChange = new EventEmitter<OpenRouterCompletionRequest>();
   models$ = new Observable<ProviderModel[]>();

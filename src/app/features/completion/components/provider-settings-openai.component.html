@@ -1,1 +1,31 @@
-<div>not implemented</div>
+<!--  models -->
+<div class="form-group mb-3">
+  <label class="form-label" for="models">model</label>
+  <select
+    (change)="onModelChanged()"
+    *ngIf="models$ | async as models; else loadingModels"
+    [(ngModel)]="request.model"
+    class="form-select"
+    id="models"
+    required
+  >
+    <option
+      *ngFor="let m of models | orderBy: 'name' : false : true"
+      [ngValue]="m.id"
+    >
+      {{ m.id }}
+    </option>
+  </select>
+  <ng-template #loadingModels>
+    <div>
+      <span class="spinner-border spinner-border-sm ms-1" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </span>
+    </div>
+  </ng-template>
+</div>
+<app-completion-parameters
+  [(request)]="this.request"
+  [capabilities]="this.completionCapabilities"
+></app-completion-parameters>
+

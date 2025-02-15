@@ -75,7 +75,7 @@
     </div>
     <hr />
     <label class="form-label" for="provider">provider</label>
-    <select [(ngModel)]="provider" class="form-select" id="provider">
+    <select [(ngModel)]="provider" class="form-select" id="provider" (change)="onProviderChange()">
       <option value="openrouter">OpenRouter</option>
       <option value="openai">OpenAI</option>
     </select>
@@ -87,6 +87,7 @@
     ></app-provider-settings-openrouter>
     <app-provider-settings-openai
       *ngIf="provider === 'openai'"
+      [(request)]="openAIRequest"
       class="overflow-y-scroll h-100"
     ></app-provider-settings-openai>
   </div>

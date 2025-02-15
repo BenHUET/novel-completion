@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { OpenRouterCompletionRequest } from '../models/openrouter.model';
 import { FormsModule } from '@angular/forms';
-import { CompletionCapability } from '../models/provider.model';
+import { CompletionCapability } from '../models/completion.model';
 import { NgIf } from '@angular/common';
 
 @Component({

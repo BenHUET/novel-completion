@@ -1,8 +1,5 @@
-import {
-  CompletionRequest,
-  CompletionResponse,
-  ProviderModel,
-} from './provider.model';
+import { ProviderModel } from './provider.model';
+import { CompletionRequest } from './completion.model';
 
 export interface OpenRouterCompletionRequest extends CompletionRequest {
   provider?: {
@@ -11,32 +8,6 @@ export interface OpenRouterCompletionRequest extends CompletionRequest {
     allow_fallbacks?: boolean;
   };
   include_reasoning?: boolean;
-}
-
-export interface OpenRouterCompletionResponse extends CompletionResponse {
-  choices: (OpenRouterStreamingChoice | OpenRouterNonChatChoice)[];
-}
-
-export interface OpenRouterNonChatChoice {
-  finish_reason: string | null;
-  text: string;
-  error?: OpenRouterErrorResponse;
-}
-
-export interface OpenRouterStreamingChoice {
-  finish_reason: string | null;
-  delta: {
-    content?: string;
-    reasoning?: string;
-    role?: string;
-  };
-  error?: OpenRouterErrorResponse;
-}
-
-interface OpenRouterErrorResponse {
-  code: number;
-  message: string;
-  metadata?: Record<string, unknown>;
 }
 
 export interface OpenRouterModel extends ProviderModel {
@@ -54,9 +25,4 @@ export interface OpenRouterProvider {
     completion: number;
   };
   supported_parameters: string[];
-}
-
-export interface OpenRouterGeneration {
-  id: string;
-  total_cost: number;
 }

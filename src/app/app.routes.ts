@@ -4,6 +4,6 @@ import { ProviderSetupComponent } from './features/provider-setup/provider-setup
 
 export const routes: Routes = [
   { path: 'providers', component: ProviderSetupComponent },
-  { path: 'completion', component: CompletionComponent },
+  { path: 'completions', component: CompletionComponent },
   { path: '', redirectTo: '/providers', pathMatch: 'full' },
 ];
