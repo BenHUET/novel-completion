@@ -70,7 +70,16 @@ export class OpenAIService implements ProviderService {
       })
       .pipe<ProviderModel[]>(
         map((res) => {
-          return res.data;
+          return res.data.filter(
+            (m) =>
+              !m.id.includes('tts') &&
+              !m.id.includes('dall-e') &&
+              !m.id.includes('text-embedding') &&
+              !m.id.includes('omni-moderation') &&
+              !m.id.includes('whisper') &&
+              !m.id.includes('babbage') &&
+              !m.id.includes('davinci'),
+          );
         }),
       );
   }
