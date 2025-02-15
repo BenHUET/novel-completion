@@ -137,7 +137,7 @@ export class CompletionPadComponent implements OnInit {
   }
 
   private _emitChanges(): void {
-    this.editorChange.emit(this.quillEditor.getText());
     this.contentsChange.emit(this.quillEditor.getContents());
+    this.editorChange.emit(this.quillEditor.getText());
   }
 }
